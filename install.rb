@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 
-# Script for creating a new e-mail account (part of ServerUtils [su])
+# Script for installing the scripts of ServerUtils (su)
 # Created by Christopher Hindefjord - chris@hindefjord.se - http://chris@hindefjord.se - 2014
 # Licensed under the MIT License (see LICENSE file)
 
@@ -181,7 +181,7 @@ def install_to_directory
   puts " (Keeping the .rb extensions) ".green if $keep_extensions
 
   # Go through the files
-  files = ['addemailaccount.rb','generate_password.rb']
+  files = ['listemailaccounts.rb','addemailaccount.rb','generate_password.rb']
   files.each { |f|
     # Remove the extenstion (unless we should keep it)
     nf = $keep_extensions ? f : f[0..-4]
