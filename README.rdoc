@@ -24,7 +24,7 @@ You can find how to set up a similar configuration here: http://wiki2.dovecot.or
 
 === Requirements
 
-Requires +pg+
+Requires +pg+ (and *ruby* of course)
 
 To install the requirements run
 
@@ -33,6 +33,9 @@ To install the requirements run
 or include the <i>install requirements flag</i>: +-r+ (or +--install-requirements+) when you run install.rb:
 
     ./install.rb -r
+
+*Note:* The requirements should be installed as root, as that's who's going to run the scripts!
+(the scripts can be run without root, but their functionality will be limited [depending on your setup]!)
 
 === Installing
 
@@ -47,8 +50,22 @@ or
 Check the usage information for more on how to use the install script:
 
     ./install.rb -h
+    
+You might get an error like:
+
+  /usr/lib/ruby/1.9.1/fileutils.rb:351:in `symlink': File exists - (/.../ServerUtils/addemailaccount.rb, /usr/bin/addemailaccount) (Errno::EEXIST)
+
+This is because the install script doesn't "force write".
+So if some of the files (symlinks) that the script is trying to install already exists, you need to remove them first!
+
+There is no need to run the install script if you already have installed SU, if you're updating the scripts (unless there's a new a script).
+If there's a new script, the install script will try to "install" them first, so if you get this error on a script that already was installed,
+the new script should have been installed!
 
 === TODO
 
+* Add a script to remove/purge e-mail accounts
+* Let the install handle existing files gracefully
 * Add functionality to the install script to actually move/copy the files
+* Add an unistall script
 * Maybe: Store config file in /etc instead of ./
