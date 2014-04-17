@@ -17,6 +17,7 @@ CONFIG_FILE = 'su_config.rb'
 $install_dir = DEF_INSTALL_DIR
 $just_gen_conf = false
 $dont_gen_conf = false
+$install_req = false
 $keep_extensions = false
 $simulate = false
 
@@ -41,21 +42,23 @@ def usage
   puts "\t" + __FILE__ + " -c"
   puts "\t" + __FILE__ + " -d /usr/sbin"
   puts "\nArguments:"
-  puts "\t-h, --help\t\tShow this information"
-  puts "\t-s, --simulate\t\tSimulate everything, don't making any real changes"
+  puts "\t-h, --help\t\t\tShow this information"
+  puts "\t-s, --simulate\t\t\tSimulate everything, don't making any real changes"
   print "\n"
   
-  puts "\t-d, --dir DIR\t\tThe directory where the scripts should be installed (should be in $PATH) (defaults to #{DEF_INSTALL_DIR})"
-  puts "\t-c, --just-config\tJust generate the config file, don't do any installing'"
-  puts "\t-n, --no-config\t\tDon't generate a config (useful if you already have a su_config.rb)'"
-  puts "\t-E, --keep-ext\t\tKeep the .rb extensions on the files when installing them"
-  puts "\t\t\t\t(then you have to write " + "addemailaccount.rb arthur@example.com".yellow + " instead of " + "addemailaccount arthur@example.com".yellow + ")"
+  puts "\t-d, --dir DIR\t\t\tThe directory where the scripts should be installed (should be in $PATH) (defaults to #{DEF_INSTALL_DIR})"
+  puts "\t\t\t\t\tWARNING: The script will stop with an error if the files already exists!".yellow
+  puts "\t-c, --just-config\t\tJust generate the config file, don't do any installing!"
+  puts "\t-r, --install-requirements\tInstall all the dependecies of SU (note: adds to the execution time!)"
+  puts "\t-n, --no-config\t\t\tDon't generate a config (useful if you already have a su_config.rb)'"
+  puts "\t-E, --keep-ext\t\t\tKeep the .rb extensions on the files when installing them"
+  puts "\t\t\t\t\t(then you have to write " + "addemailaccount.rb arthur@example.com".yellow + " instead of " + "addemailaccount arthur@example.com".yellow + ")"
   print "\n"
-  puts "\t-D, --db-name NAME\tSet the database name to NAME"
-  puts "\t-t, --db-table TABLE\tSet the database table to TABLE"
-  puts "\t-u, --db-user USER\tSet the database user to USER"
-  puts "\t-u, --db-user PASSWORD\tSet the database password to PASSWORD"
-  puts "\t-i, --id ID\t\tSet the default id (gid & uid) to ID (could be numeric or name [like " + "vmail".yellow + "], used to set the system/file owner of the mailboxes)"
+  puts "\t-D, --db-name NAME\t\tSet the database name to NAME"
+  puts "\t-t, --db-table TABLE\t\tSet the database table to TABLE"
+  puts "\t-u, --db-user USER\t\tSet the database user to USER"
+  puts "\t-u, --db-user PASSWORD\t\tSet the database password to PASSWORD"
+  puts "\t-i, --id ID\t\t\tSet the default id (gid & uid) to ID (could be numeric or name [like " + "vmail".yellow + "], used to set the system/file owner of the mailboxes)"
 
   # We also exit the script here..
   exit(0)
@@ -73,6 +76,7 @@ def init
     o.on('-d DIR',      '--dir DIR')               { |d| $install_dir = d }
     o.on('-E',          '--keep-ext')              { |b| $keep_extensions = b }
     o.on('-c',          '--just-config')           { |b| $just_gen_conf = b; }
+    o.on('-r',          '--install-requirements')  { |b| $install_req = b; }
     o.on('-n',          '--no-config')             { |b| $dont_gen_conf = true } # b assingment didn't work!? (b was false)
     o.on('-s',          '--simulate')              { |b| $simulate = b }
     o.on('-h',          '--help')                  { usage }
@@ -109,6 +113,8 @@ def main
     puts "\nSkips installing, just generated the config file!".pink
     exit(0)
   end
+  
+  install_dependencies if $install_req
 
   install_to_directory
 end
@@ -187,6 +193,15 @@ def install_to_directory
     # adding "execute permission"
     fu.chmod "a+x", $install_dir + nf
   }
+
+end
+
+# Method that install dependencies
+def install_dependencies
+
+  # Install the pg gem
+  puts "> Installing the pg gem".green
+  system "gem install pg"
 
 end
 
