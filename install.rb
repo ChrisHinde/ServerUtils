@@ -57,7 +57,7 @@ def usage
   puts "\t-D, --db-name NAME\t\tSet the database name to NAME"
   puts "\t-t, --db-table TABLE\t\tSet the database table to TABLE"
   puts "\t-u, --db-user USER\t\tSet the database user to USER"
-  puts "\t-u, --db-user PASSWORD\t\tSet the database password to PASSWORD"
+  puts "\t-p, --db-password PASSWORD\t\tSet the database password to PASSWORD"
   puts "\t-i, --id ID\t\t\tSet the default id (gid & uid) to ID (could be numeric or name [like " + "vmail".yellow + "], used to set the system/file owner of the mailboxes)"
 
   # We also exit the script here..
@@ -199,9 +199,17 @@ end
 # Method that install dependencies
 def install_dependencies
 
+  # sudo apt-get install postgresql-client libpq5 libpq-dev
+  # sudo apt-get install ruby1.9-dev
+  # sudo apt-get install make
+  
   # Install the pg gem
   puts "> Installing the pg gem".green
-  system "gem install pg"
+  system "gem install pg" unless $simulate
+  
+  # Install the nokogiri gem
+  puts "> Installing the nokogiri gem".green
+  system "gem install nokogiri" unless $simulate
 
 end
 
