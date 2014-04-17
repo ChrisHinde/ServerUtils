@@ -18,6 +18,7 @@ $install_dir = DEF_INSTALL_DIR
 $just_gen_conf = false
 $dont_gen_conf = false
 $install_req = false
+$force_install = false
 $keep_extensions = false
 $simulate = false
 
@@ -49,15 +50,16 @@ def usage
   puts "\t-d, --dir DIR\t\t\tThe directory where the scripts should be installed (should be in $PATH) (defaults to #{DEF_INSTALL_DIR})"
   puts "\t\t\t\t\tWARNING: The script will stop with an error if the files already exists!".yellow
   puts "\t-c, --just-config\t\tJust generate the config file, don't do any installing!"
-  puts "\t-r, --install-requirements\tInstall all the dependecies of SU (note: adds to the execution time!)"
   puts "\t-n, --no-config\t\t\tDon't generate a config (useful if you already have a su_config.rb)'"
+  puts "\t-r, --install-requirements\tInstall all the dependecies of SU (note: adds to the execution time!)"
+  puts "\t-F, --force-install\t\tForces the install, overwrites files in the install directory if they exists (" + "Be careful with this!".red + ")"
   puts "\t-E, --keep-ext\t\t\tKeep the .rb extensions on the files when installing them"
   puts "\t\t\t\t\t(then you have to write " + "addemailaccount.rb arthur@example.com".yellow + " instead of " + "addemailaccount arthur@example.com".yellow + ")"
   print "\n"
   puts "\t-D, --db-name NAME\t\tSet the database name to NAME"
   puts "\t-t, --db-table TABLE\t\tSet the database table to TABLE"
   puts "\t-u, --db-user USER\t\tSet the database user to USER"
-  puts "\t-p, --db-password PASSWORD\t\tSet the database password to PASSWORD"
+  puts "\t-p, --db-password PASSWORD\tSet the database password to PASSWORD"
   puts "\t-i, --id ID\t\t\tSet the default id (gid & uid) to ID (could be numeric or name [like " + "vmail".yellow + "], used to set the system/file owner of the mailboxes)"
 
   # We also exit the script here..
@@ -75,6 +77,7 @@ def init
     o.on('-i ID',       '--default-id ID')         { |i| $DEFAULT_ID = i }
     o.on('-d DIR',      '--dir DIR')               { |d| $install_dir = d }
     o.on('-E',          '--keep-ext')              { |b| $keep_extensions = b }
+    o.on('-F',          '--force-install')         { |b| $force_install = b }
     o.on('-c',          '--just-config')           { |b| $just_gen_conf = b; }
     o.on('-r',          '--install-requirements')  { |b| $install_req = b; }
     o.on('-n',          '--no-config')             { |b| $dont_gen_conf = true } # b assingment didn't work!? (b was false)
@@ -186,8 +189,20 @@ def install_to_directory
     # Tell the user
     puts "> Linking ".green + "#{curr_dir}#{f}".yellow + ' to '.green + "#{$install_dir}#{nf}".yellow
 
-    # Link the file
-    fu.ln_s curr_dir + f, $install_dir + nf
+    if $force_install
+      puts "Forcing the install of #{nf}!".red
+      # Link the file
+      fu.ln_sf curr_dir + f, $install_dir + nf
+    else
+      begin
+        # Link the file
+        fu.ln_s curr_dir + f, $install_dir + nf
+      rescue Exception => e
+        puts "Couldn't link the file:".pink
+        puts e.message.red
+        next
+      end
+    end
 
     puts "> Adding 'execute permission' to the file".green
     # adding "execute permission"

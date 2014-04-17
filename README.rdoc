@@ -37,7 +37,7 @@ or include the <i>install requirements flag</i>: +-r+ (or +--install-requirement
 *Note:* The requirements should be installed as root, as that's who's going to run the scripts!
 (the scripts can be run without root, but their functionality will be limited [depending on your setup]!)
 
-If you get an error saying something like +`require': cannot load such file -- mkmf+,
+If you get an error saying something like <tt>`require': cannot load such file -- mkmf</tt>,
 try installing the following (for Debian based systems):
 
     sudo apt-get install postgresql-client libpq5 libpq-dev
@@ -61,22 +61,16 @@ or
 Check the usage information for more on how to use the install script:
 
     ./install.rb -h
-    
-You might get an error like:
 
-  /usr/lib/ruby/1.9.1/fileutils.rb:351:in `symlink': File exists - (/.../ServerUtils/addemailaccount.rb, /usr/bin/addemailaccount) (Errno::EEXIST)
+By default the script won't overwrite existing files in the install dir.
+If the file already exists, you get a message like <tt>Couldn't link the file</tt>a and the script will continue to the next file.
+You can force the overwriting by using the +-f+ flag (<b>If you're using the install script to update you should use +-n+ to avoid owerwiting yor config file</b>):
 
-This is because the install script doesn't "force write".
-So if some of the files (symlinks) that the script is trying to install already exists, you need to remove them first!
-
-There is no need to run the install script if you already have installed SU, if you're updating the scripts (unless there's a new a script).
-If there's a new script, the install script will try to "install" them first, so if you get this error on a script that already was installed,
-the new script should have been installed!
+    ./install.rb -f   # or    ./install.rb -nf 
 
 === TODO
 
 * Add a script to remove/purge e-mail accounts
-* Let the install handle existing files gracefully
 * Add functionality to the install script to actually move/copy the files
 * Add an unistall script
 * Maybe: Store config file in /etc instead of ./
