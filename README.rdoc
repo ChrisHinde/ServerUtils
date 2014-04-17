@@ -2,8 +2,8 @@
 
 This is a collection of scripts, written in Ruby, that can be useful for administrating servers
 
-Created by Christopher Hindefjord - chris@hindefjord.se - http://chris@hindefjord.se - 2014
-Licensed under the MIT License (see LICENSE file)
+  Created by Christopher Hindefjord - chris@hindefjord.se - http://chris@hindefjord.se - 2014
+  Licensed under the MIT License (see LICENSE file)
 
 === DISCLAIMER
 
@@ -12,16 +12,41 @@ so there's no guarantee that they will work "out of the box" for you (but they m
 It also means that all the output to the user is in Swedish, even so, all comments in the scripts
 are n English, so it shouldn't be impossible to figure out what's the output texts mean (a i18n version may come in the future).
 
-The setup of the server is based on Debian with Postfix and Dovecot using virtual users and the Mailbox format.
+The setup of the server is based on Debian with Postfix and Dovecot using virtual users (stored in a PostgreSQL database) and the Mailbox format.
 You can find how to set up a similar configuration here: http://wiki2.dovecot.org/HowTo/DovecotPostgresql
 
 === Files
 
-* *generate_password.rb* - Generates a secure but userfriendly password using random words
-* *addemailaccount.rb* - Lets you add an virtual e-mail account, handles all the steps that are involved
-* *su_lib.rb* - Contains a library of methods used by the other scripts
-* *su_config.rb* - Holds the configuration that controlls the behaviours of the scripts
+* +generate_password.rb+ - Generates a secure but userfriendly password using random words
+* +addemailaccount.rb+ - Lets you add an virtual e-mail account, handles all the steps that are involved
+* +su_lib.rb+ - Contains a library of methods used by the other scripts
+* +su_config.rb+ - Holds the configuration that controlls the behaviours of the scripts
 
+=== Requirements
+
+Requires +pg+
+
+To install the requirements run
+
+    gem install pg
+
+or include the <i>install requirements flag</i>: +-r+ (or +--install-requirements+) when you run install.rb:
+
+    ./install.rb -r
+
+=== Installing
+
+Use the install.rb to install the scripts:
+
+    ./install.rb
+
+or
+
+    ruby install.rb
+
+Check the usage information for more on how to use the install script:
+
+    ./install.rb -h
 
 === TODO
 
