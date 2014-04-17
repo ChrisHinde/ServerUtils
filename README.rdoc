@@ -2,8 +2,8 @@
 
 This is a collection of scripts, written in Ruby, that can be useful for administrating servers
 
-    Created by Christopher Hindefjord - chris@hindefjord.se - http://chris@hindefjord.se - 2014
-    Licensed under the MIT License (see LICENSE file)
+Created by Christopher Hindefjord - chris@hindefjord.se - http://chris@hindefjord.se - 2014
+Licensed under the MIT License (see LICENSE file)
 
 === DISCLAIMER
 
@@ -17,13 +17,13 @@ You can find how to set up a similar configuration here: http://wiki2.dovecot.or
 
 === Files
 
- * *generate_password.rb* - Generates a secure but userfriendly password using random words
- * *addemailaccount.rb* - Lets you add an virtual e-mail account, handles all the steps that are involved
- * *su_lib.rb* - Contains a library of methods used by the other scripts
- * *su_config.rb* - Holds the configuration that controlls the behaviours of the scripts
+* *generate_password.rb* - Generates a secure but userfriendly password using random words
+* *addemailaccount.rb* - Lets you add an virtual e-mail account, handles all the steps that are involved
+* *su_lib.rb* - Contains a library of methods used by the other scripts
+* *su_config.rb* - Holds the configuration that controlls the behaviours of the scripts
 
 
 === TODO
 
- * Add functionality to the install script to actually move/copy the files
- * Maybe: Store config file in /etc instead of ./
+* Add functionality to the install script to actually move/copy the files
+* Maybe: Store config file in /etc instead of ./
