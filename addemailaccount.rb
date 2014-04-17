@@ -80,14 +80,6 @@ def init
   $random_char_password = true if $random_char_password.nil?
   $save_file            = true if $save_file.nil?
 
-  # If this isn't a simulation ...
-  unless $simulate
-    # ... check if the script is running as root, if it isn't: warn the user!
-    puts "OBS!!!\nDetta kommando bör köras som root!\n".pink unless is_root?
-  else
-    puts "Kör i simuleringsläge!".pink
-  end
-
   # Get the e-mail address from the arguments
   begin 
     $email = ARGV.pop
@@ -103,6 +95,14 @@ def init
   if email_parts.length < 3
     puts "Det här ser inte ut som en giltig e-postadress: '#{$email}'!".red
     exit(65)
+  end
+
+  # If this isn't a simulation ...
+  unless $simulate
+    # ... check if the script is running as root, if it isn't: warn the user!
+    puts "OBS!!!\nDetta kommando bör köras som root!\n".pink unless is_root?
+  else
+    puts "Kör i simuleringsläge!".pink
   end
 
   # Store the parts of the address in appropriate variables
@@ -192,8 +192,8 @@ def create_directories
   $user_path['%domain'] = $email_domain
 
   # Concat the paths of the directories we should create
-  mail_dir = '.' + BASE_PATH_MAIL + $user_path 
-  home_dir = '.' + BASE_PATH_HOME + $user_path
+  mail_dir = BASE_PATH_MAIL + $user_path 
+  home_dir = BASE_PATH_HOME + $user_path
 
   # Tell the user what's going on
   puts "> Skapar kataloger för e-postkontot: #{mail_dir}, #{home_dir}".green
@@ -233,7 +233,7 @@ def add_to_database
   # Tell the user what's going on
   puts "> Ansluter till databasen".green
   # Connect to the database
-  conn = PG.connect( dbname: DB_DATABASE_NAME )
+  conn = PG.connect( dbname: DB_DATABASE_NAME, user: DB_USER, password: DB_PASSWORD )
 
   # Tell the user what's going on
   puts "> Lägger till användaren i databasen".green
