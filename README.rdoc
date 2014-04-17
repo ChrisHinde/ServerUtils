@@ -19,6 +19,7 @@ You can find how to set up a similar configuration here: http://wiki2.dovecot.or
 
 * +generate_password.rb+ - Generates a secure but userfriendly password using random words
 * +addemailaccount.rb+ - Lets you add an virtual e-mail account, handles all the steps that are involved
+* +listemailaccounts.rb+ - Lists existing email accounts (tip: use with <tt>|less</tt> if there's a lot of accounts)
 * +su_lib.rb+ - Contains a library of methods used by the other scripts
 * +su_config.rb+ - Holds the configuration that controlls the behaviours of the scripts
 
