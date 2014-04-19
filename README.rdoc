@@ -72,7 +72,6 @@ You can force the overwriting by using the +-f+ flag (<b>If you're using the ins
 
 === TODO
 
-* Add a script to remove/purge e-mail accounts
 * Add functionality to the install script to actually move/copy the files
 * Add an unistall script
 * Maybe: Store config file in /etc instead of ./
