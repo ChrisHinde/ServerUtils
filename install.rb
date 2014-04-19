@@ -181,7 +181,7 @@ def install_to_directory
   puts " (Keeping the .rb extensions) ".green if $keep_extensions
 
   # Go through the files
-  files = ['listemailaccounts.rb','addemailaccount.rb','generate_password.rb']
+  files = ['deleteemailaccount.rb','listemailaccounts.rb','addemailaccount.rb','generate_password.rb']
   files.each { |f|
     # Remove the extenstion (unless we should keep it)
     nf = $keep_extensions ? f : f[0..-4]

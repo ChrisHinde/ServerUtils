@@ -20,6 +20,7 @@ You can find how to set up a similar configuration here: http://wiki2.dovecot.or
 * +generate_password.rb+ - Generates a secure but userfriendly password using random words
 * +addemailaccount.rb+ - Lets you add an virtual e-mail account, handles all the steps that are involved
 * +listemailaccounts.rb+ - Lists existing email accounts (tip: use with <tt>|less</tt> if there's a lot of accounts)
+* +deleteemailaccount.rb+ - Lets you delete an virtual e-mail account, handles all the steps that are involved
 * +su_lib.rb+ - Contains a library of methods used by the other scripts
 * +su_config.rb+ - Holds the configuration that controlls the behaviours of the scripts
 
@@ -64,8 +65,8 @@ Check the usage information for more on how to use the install script:
     ./install.rb -h
 
 By default the script won't overwrite existing files in the install dir.
-If the file already exists, you get a message like <tt>Couldn't link the file</tt>a and the script will continue to the next file.
-You can force the overwriting by using the +-f+ flag (<b>If you're using the install script to update you should use +-n+ to avoid owerwiting yor config file</b>):
+If the file already exists, you get a message like <tt>Couldn't link the file</tt> and the script will continue to the next file.
+You can force the overwriting by using the +-f+ flag (<b>If you're using the install script to update you should use +-n+ to avoid overwriting your config file</b>):
 
     ./install.rb -f   # or    ./install.rb -nf 
 

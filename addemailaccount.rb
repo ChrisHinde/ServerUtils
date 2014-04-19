@@ -237,7 +237,7 @@ def add_to_database
 
   # Tell the user what's going on
   puts "> Lägger till användaren i databasen".green
-  # Insert the user into the correct table
+  # Insert the account into the correct table
   conn.exec_params "INSERT INTO #{DB_ACCOUNTS_TABLE} (userid, password, realname, uid, gid, home, mail)" +
                       " VALUES ($1, $2, $3, $4, $5, $6, $6)",
                     [$email, $enc_password, $name, $uid, $gid, $user_path] unless $simulate

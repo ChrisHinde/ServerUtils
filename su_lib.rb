@@ -25,7 +25,7 @@ module ServerUtils_Lib
     # Otherwise use the "subroutine" genpass to generate a password with random words
     else
       # Call the "genpass subroutine"
-      password = `./generate_password.rb`.downcase
+      password = `generate_password`.downcase
     end
     
     return password
@@ -37,9 +37,13 @@ module ServerUtils_Lib
   #   - +prompt+ -> The prompt/question to show to the user
   # * *Returns*:
   #   - The string the user gave
-  def ask_user(prompt="Password: ")
+  def ask_user(prompt="Password: ",noecho=true)
     print prompt
-    STDIN.noecho(&:gets).strip
+    if noecho
+      STDIN.noecho(&:gets).strip
+    else
+      gets.strip
+    end
   end
 
   # Encrypt the password for storage in the database
