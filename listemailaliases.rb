@@ -96,7 +96,7 @@ def get_aliases
     w << " AND" if $alias && $email
     w << " userid LIKE '#{$email}'" if $email
   end
-p w
+
   # Insert the user into the correct table
   res = conn.exec "SELECT * FROM #{DB_ALIAS_TABLE}#{w}"
 
