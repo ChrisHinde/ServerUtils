@@ -190,7 +190,7 @@ def install_to_directory
   puts " (Keeping the .rb extensions) ".green if $keep_extensions
 
   # Go through the files
-  files = ['deleteemailaliases.rb','addemailaliases.rb','listemailaliases.rb',
+  files = ['deleteemailalias.rb','addemailalias.rb','listemailaliases.rb',
             'deleteemaildomain.rb','addemaildomain.rb','deleteemailaccount.rb',
             'listemailaccounts.rb','addemailaccount.rb','generate_password.rb']
   files.each { |f|
