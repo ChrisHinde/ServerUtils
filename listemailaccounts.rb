@@ -41,11 +41,6 @@ def init
     o.on('-h',          '--help')             { usage }
     o.parse!
   end
-
-  # Make shure we have nice values later on
-  $random_char_password = true if $random_char_password.nil?
-  $save_file            = true if $save_file.nil?
-
 end
 
 
@@ -98,7 +93,6 @@ end
 
 # Method that retrieves the accounts
 def get_accounts
-
   # Connect to the database
   conn = PG.connect( dbname: DB_DATABASE_NAME, user: DB_USER, password: DB_PASSWORD )
 

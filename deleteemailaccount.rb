@@ -84,7 +84,7 @@ def main
     puts "Kör i simuleringsläge!".pink
   end
 
-  # List the accounts
+  # Delete the account
   delete_account $email
 end
 
@@ -122,7 +122,6 @@ def delete_db_post account
 
   # Close the connection
   conn.close
-
 end
 
 # Method that removes the account from the file system

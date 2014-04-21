@@ -22,11 +22,14 @@ $force_install = false
 $keep_extensions = false
 $simulate = false
 
-$DEFAULT_ID   = 3001
-$DB_NAME      = 'mails'
-$DB_TABLE     = 'users'
-$DB_USER      = 'mailwriter'
-$DB_PASSWORD  = '12qwaszx'
+$DEFAULT_ID     = 3001
+$BASE_PATH      = '/home/mailboxes/'
+$DB_NAME        = 'mails'
+$DB_ACC_TABLE   = 'users'
+$DB_DOM_TABLE   = 'transport'
+$DB_VIRT_TABLE  = 'virtual'
+$DB_USER        = 'mailwriter'
+$DB_PASSWORD    = '12qwaszx'
 
 # Method for printing the "usage information"
 def usage
@@ -57,9 +60,11 @@ def usage
   puts "\t\t\t\t\t(then you have to write " + "addemailaccount.rb arthur@example.com".yellow + " instead of " + "addemailaccount arthur@example.com".yellow + ")"
   print "\n"
   puts "\t-D, --db-name NAME\t\tSet the database name to NAME"
-  puts "\t-t, --db-table TABLE\t\tSet the database table to TABLE"
-  puts "\t-u, --db-user USER\t\tSet the database user to USER"
-  puts "\t-p, --db-password PASSWORD\tSet the database password to PASSWORD"
+  puts "\t-U, --db-user USER\t\tSet the database user to USER"
+  puts "\t-P, --db-password PASSWORD\tSet the database password to PASSWORD"
+  puts "\t-u, --user-table TABLE\t\tSet the database table to TABLE"
+  puts "\t-t, --domain-table TABLE\t\tSet the database table to TABLE"
+  puts "\t-a, --alias-table TABLE\t\tSet the database table to TABLE"
   puts "\t-i, --id ID\t\t\tSet the default id (gid & uid) to ID (could be numeric or name [like " + "vmail".yellow + "], used to set the system/file owner of the mailboxes)"
 
   # We also exit the script here..
@@ -71,9 +76,11 @@ def init
   # Validate and parse the flags
   OptionParser.new do |o|
     o.on('-D NAME',     '--db-name NAME')          { |n| $DB_NAME = n }
-    o.on('-t TABLE',    '--db-table TABLE')        { |t| $DB_TABLE = t }
-    o.on('-u USER',     '--db-user USER')          { |u| $DB_USER = u }
-    o.on('-p PASSWORD', '--db-password PASSWORD')  { |p| $DB_PASSWORD = p }
+    o.on('-U USER',     '--db-user USER')          { |u| $DB_USER = u }
+    o.on('-P PASSWORD', '--db-password PASSWORD')  { |p| $DB_PASSWORD = p }
+    o.on('-u TABLE',    '--user-table TABLE')      { |t| $DB_ACC_TABLE = t }
+    o.on('-t TABLE',    '--domain-table TABLE')    { |t| $DB_DOM_TABLE = t }
+    o.on('-a TABLE',    '--alias-table TABLE')     { |t| $DB_VIRT_TABLE = t }
     o.on('-i ID',       '--default-id ID')         { |i| $DEFAULT_ID = i }
     o.on('-d DIR',      '--dir DIR')               { |d| $install_dir = d }
     o.on('-E',          '--keep-ext')              { |b| $keep_extensions = b }
@@ -135,16 +142,18 @@ def generate_config
 # Created by Christopher Hindefjord - chris@hindefjord.se - http://chris@hindefjord.se - 2014
 # Licensed under the MIT License (see LICENSE file)
 
-DEFAULT_ID = #{$DEFAULT_ID}
-BASE_PATH = '/home/mailboxes/'
-BASE_PATH_MAIL = BASE_PATH + 'maildir/'
-BASE_PATH_HOME = BASE_PATH + 'home/'
-USER_PATH = '%domain/mails/%user'
-MAILBOX_RIGHTS = 0770 # "ug=wrx"
-DB_DATABASE_NAME = '#{$DB_NAME}'
-DB_ACCOUNTS_TABLE = '#{$DB_TABLE}'
-DB_USER = '#{$DB_USER}'
-DB_PASSWORD = '#{$DB_PASSWORD}'
+DEFAULT_ID        = #{$DEFAULT_ID}
+BASE_PATH         = '#{$BASE_PATH}'
+BASE_PATH_MAIL    = BASE_PATH + 'maildir/'
+BASE_PATH_HOME    = BASE_PATH + 'home/'
+USER_PATH         = '%domain/mails/%user'
+MAILBOX_RIGHTS    = 0770 # "ug=wrx"
+DB_DATABASE_NAME  = '#{$DB_NAME}'
+DB_ACCOUNTS_TABLE = '#{$DB_ACC_TABLE}'
+DB_DOMAINS_TABLE  = '#{$DB_DOM_TABLE}'
+DB_ALIAS_TABLE    = '#{$DB_VIRT_TABLE}'
+DB_USER           = '#{$DB_USER}'
+DB_PASSWORD       = '#{$DB_PASSWORD}'
 
 CONF_END
 
@@ -181,7 +190,7 @@ def install_to_directory
   puts " (Keeping the .rb extensions) ".green if $keep_extensions
 
   # Go through the files
-  files = ['deleteemailaccount.rb','listemailaccounts.rb','addemailaccount.rb','generate_password.rb']
+  files = ['deleteemaildomain.rb','addemaildomain.rb','deleteemailaccount.rb','listemailaccounts.rb','addemailaccount.rb','generate_password.rb']
   files.each { |f|
     # Remove the extenstion (unless we should keep it)
     nf = $keep_extensions ? f : f[0..-4]
