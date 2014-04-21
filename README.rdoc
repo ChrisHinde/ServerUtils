@@ -17,10 +17,16 @@ You can find how to set up a similar configuration here: http://wiki2.dovecot.or
 
 === Files
 
-* +generate_password.rb+ - Generates a secure but userfriendly password using random words
+* +generate_password.rb+ - Generates a secure but user friendly password using random words
 * +addemailaccount.rb+ - Lets you add an virtual e-mail account, handles all the steps that are involved
 * +listemailaccounts.rb+ - Lists existing email accounts (tip: use with <tt>|less</tt> if there's a lot of accounts)
 * +deleteemailaccount.rb+ - Lets you delete an virtual e-mail account, handles all the steps that are involved
+* +addemaildomain.rb+ - Lets you add a "virtual" e-mail domain, handles all the steps that are involved
+* +listemaildomains.rb+ - Lists existing email domains (tip: use with <tt>|less</tt> if there's a lot of accounts)
+* +deleteemaildomain.rb+ - Lets you delete a virtual e-mail domain, handles all the steps that are involved (NOTE: Can delete accounts as well)
+* +addemailalias.rb+ - Lets you add an e-mail alias
+* +listemailalias.rb+ - Lists existing email aliases (tip: use with <tt>|less</tt> if there's a lot of accounts)
+* +deleteemailalias.rb+ - Lets you delete a e-mail alias
 * +su_lib.rb+ - Contains a library of methods used by the other scripts
 * +su_config.rb+ - Holds the configuration that controlls the behaviours of the scripts
 
