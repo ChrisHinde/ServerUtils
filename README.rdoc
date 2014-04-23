@@ -10,15 +10,21 @@ This is a collection of scripts, written in Ruby, that can be useful for adminis
 These scripts were written to be used on a specific server (but they should work on similar setups),
 so there's no guarantee that they will work "out of the box" for you (but they might become more general in the future).
 It also means that all the output to the user is in Swedish, even so, all comments in the scripts
-are n English, so it shouldn't be impossible to figure out what's the output texts mean (a i18n version may come in the future).
+are in English, so it shouldn't be impossible to figure out what's the output texts mean (a i18n version may come in the future).
 
 The setup of the server is based on Debian with Postfix and Dovecot using virtual users (stored in a PostgreSQL database) and the Mailbox format.
 You can find how to set up a similar configuration here: http://wiki2.dovecot.org/HowTo/DovecotPostgresql
 
+<b>Please Note:</b>
+These scripts are ment to be run by a server administrator (someone who knows what they are doing)!
+So limit the access to these script (like by changing the install directory to +/usr/sbin/+)
+Currently the scripts are vulnerable to SQL injections!
+Also limit the read access of the config file, since it contains the password to your "mail database"!
+
 === Files
 
 * +generate_password.rb+ - Generates a secure but user friendly password using random words
-* +addemailaccount.rb+ - Lets you add an virtual e-mail account, handles all the steps that are involved
+* +addemailaccount.rb+ - Lets you add an virtual e-mail account, handles all the steps that are involved (run this without any arguments to use it in interactive mode)
 * +listemailaccounts.rb+ - Lists existing email accounts (tip: use with <tt>|less</tt> if there's a lot of accounts)
 * +deleteemailaccount.rb+ - Lets you delete an virtual e-mail account, handles all the steps that are involved
 * +addemaildomain.rb+ - Lets you add a "virtual" e-mail domain, handles all the steps that are involved
@@ -29,6 +35,8 @@ You can find how to set up a similar configuration here: http://wiki2.dovecot.or
 * +deleteemailalias.rb+ - Lets you delete a e-mail alias
 * +su_lib.rb+ - Contains a library of methods used by the other scripts
 * +su_config.rb+ - Holds the configuration that controlls the behaviours of the scripts
+
+All runable scripts (except +generate_password.rb+) will output help/usage information if you run them with the +-h+ flag!
 
 === Requirements
 
