@@ -30,11 +30,12 @@ $gid = DEFAULT_ID
 $home = ''
 $random_char_password = false
 $save_file = false
+$ask_for_info = false
 
 # Method for printing the "usage information"
 def usage
   puts "USAGE:"
-  puts "\t" + __FILE__ + " E-POST [ARGUMENT]"
+  puts "\t" + __FILE__ + " [E-POST] [ARGUMENT]"
   print "\n"
   puts "Exempel:"
   puts "\t" + __FILE__ + " arthur@example.com -n \"Arthur Dent\" -p 12qwaszx"
@@ -85,18 +86,6 @@ def init
     $email = ARGV.pop
   end until ( $email == nil ) || ( $email[0] != '-' )
 
-  # If we didn't get an address, output the usage info
-  usage unless $email
-
-  # Scan the address to get the different parts (also very basic validation)
-  email_parts = $email.scan(/^(.+)@(.+)\.([a-z]{2,4})$/).flatten
-
-  # If we have less than 3 parts, it's not a valid e-mail address
-  if email_parts.length < 3
-    puts "Det här ser inte ut som en giltig e-postadress: '#{$email}'!".red
-    exit(65)
-  end
-
   # If this isn't a simulation ...
   unless $simulate
     # ... check if the script is running as root, if it isn't: warn the user!
@@ -105,14 +94,17 @@ def init
     puts "Kör i simuleringsläge!".pink
   end
 
-  # Store the parts of the address in appropriate variables
-  $email_user = email_parts[0]
-  $email_domain = email_parts[1] + '.' + email_parts[2]
+  # If we didn't get an address, output the usage info
+  unless $email
+    $ask_for_info = true
+    return
+  end
+
+  check_email or exit(65)
 end
 
-
 # The main method, it just calls other methods
-def main
+def main_def
   # Say hello to the user
   puts "Skapar ett e-postkonto för '#{$email}'"
   puts "-----------------------\n"
@@ -129,6 +121,68 @@ def main
 end
 
 
+# The main method, it just calls other methods
+def main_ask
+  # Say hello to the user
+  puts "Lägg till ett e-postkonto"
+  puts "-----------------------\n"
+
+  # Ask for a e-mailaddress, keep going if it's not valid
+  begin
+    $email = ask_user 'Vilken e-postadress vill du lägga till? ', false
+  end until check_email
+
+  # Ask the user for a name (accept empty)
+  $name = ask_user 'Ange användarens namn (Kan vara tomt): ', false
+
+  # Ask the user how we should do with the password
+  pass_do = ask_user 'Hur vill du göra med lösenordet? [g = generera, r = generera med slumpade tecken, A = Ange ett lösenord] ', false
+
+  # Set the appropriate "flags"
+  case pass_do
+  when "g"
+    $generate = true
+  when "r", "gr"
+    $generate = true
+    $random_char_password = true
+  end
+
+  handle_password
+
+  print "\n"
+
+  create_directories
+
+  add_to_database
+
+  # Ask the user if we should save the info to a file
+  ans = ask_user "Vill du spara användarinformationen till en fil? [ja/j/NEJ] ", false
+
+  save_file = ['y', 'j', 'yes', 'ja'].include? ans.downcase
+  
+  save_to_file if save_file
+end
+
+def check_email
+  # We only want lowercase!
+  $email.downcase!
+
+  # Scan the address to get the different parts (also very basic validation)
+  email_parts = $email.scan(/^(.+)@(.+)\.([a-z]{2,4})$/).flatten
+
+  # If we have less than 3 parts, it's not a valid e-mail address
+  if email_parts.length < 3
+    puts "Det här ser inte ut som en giltig e-postadress: '#{$email}'!".red
+    return false
+  end
+
+  # Store the parts of the address in appropriate variables
+  $email_user = email_parts[0]
+  $email_domain = email_parts[1] + '.' + email_parts[2]
+
+  return true
+end
+
 # Handles all the things that has to do with the password
 def handle_password
   # If the password already isn't set already
@@ -136,7 +190,7 @@ def handle_password
     # Should we generate a password
     if $generate
       # Tell the user what's going on
-      puts "> Genererar ett lösenord".green
+      puts "> Genererar ett lösenord (Kan ta några sekunder)".green
 
       # Check if $random_charpassword is a a numeric string, if so use t
       num = ($random_char_password.is_a? String and is_numeric? $random_char_password) ? $random_char_password.to_i : 16
@@ -261,6 +315,7 @@ def save_to_file
   # Open a "file stream"
   File.open(filename, 'w') {
     |f|
+    f.write "<" + $name + "> " unless $name == ''
     f.write $email + "\n"
     f.write $password + "\n"
   } unless $simulate
@@ -274,6 +329,8 @@ end
 init
 
 # Run the main "program"
-main
-
-
+if $ask_for_info
+  main_ask
+else
+  main_def
+end
