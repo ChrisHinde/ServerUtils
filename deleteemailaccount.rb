@@ -19,18 +19,16 @@ $email = nil
 
 # Method for printing the "usage information"
 def usage
-  puts "USAGE:"
-  puts "\t" + __FILE__ + " E-POST [ARGUMENT]"
-  #print "\n"
-  #puts "Exempel:"
-  #puts "\t" + __FILE__ + " arthur@example.com -n \"Arthur Dent\" -p 12qwaszx"
-  #puts "\t" + __FILE__ + " arthur@example.com -n \"Arthur Dent\" -G"
-  puts "\nArgument:"
-  puts "\t-h, --help\t\t\tVisa denna information"
-  puts "\t-s, --simulate\t\t\tSimulera allt, gör inga ändringar i filsystem eller databas"
-  #print "\n"
+  puts <<EOU
+USAGE:
+  #{__FILE__} E-POST [ARGUMENT]
 
-  #puts "\t-n, --name NAMN\t\t\tAnge NAMN som fullt namn för e-postkontot"
+Ta bort e-postkontot för E-POST
+
+Argument:
+  -h, --help        Visa denna information
+  -s, --simulate    Simulera allt, gör inga ändringar i filsystem eller databas
+EOU
 
   # We also exit the script here..
   exit(0)

@@ -17,17 +17,20 @@ include ServerUtils_Lib
 
 # Method for printing the "usage information"
 def usage
-  puts "USAGE:"
-  puts "\t" + __FILE__ + " [ARGUMENT]"
-  #print "\n"
-  #puts "Exempel:"
-  #puts "\t" + __FILE__ + " arthur@example.com -n \"Arthur Dent\" -p 12qwaszx"
-  #puts "\t" + __FILE__ + " arthur@example.com -n \"Arthur Dent\" -G"
-  puts "\nArgument:"
-  puts "\t-h, --help\t\t\tVisa denna information"
-  #print "\n"
+  puts <<EOU
+USAGE:
+  #{__FILE__} [ARGUMENT]
 
-  #puts "\t-n, --name NAMN\t\t\tAnge NAMN som fullt namn för e-postkontot"
+Listar alla tillgängliga e-postkonton
+
+Argument:
+  -h, --help    Visa denna information
+
+TIPS: Använd tillsammans med less om listan är för lång:
+
+ #{__FILE__}|less
+
+EOU
 
   # We also exit the script here..
   exit(0)

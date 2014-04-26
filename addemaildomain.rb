@@ -24,21 +24,26 @@ $gid       = DEFAULT_ID
 
 # Method for printing the "usage information"
 def usage
-  puts "USAGE:"
-  puts "\t" + __FILE__ + " DOMÄN [ARGUMENT]"
-  print "\n"
-  puts "Exempel:"
-  puts "\t" + __FILE__ + " example.com"
-  #puts "\t" + __FILE__ + " example.com -n \"Arthur Dent\" -G"
-  puts "\nArgument:"
-  puts "\t-h, --help\t\t\tVisa denna information"
-  puts "\t-s, --simulate\t\t\tSimulera allt, gör inga ändringar i filsystem eller databas"
-  print "\n"
-  
-  #puts "\t-t, --transport TRANSPORT\t\t\tAnge NAMN som fullt namn för e-postkontot"
-  puts "\t-u, --uid UID\t\t\tAnge ett UID för katalogerna"
-  puts "\t-g, --gid GID\t\t\tAnge ett GID för katalogerna"
-  puts "\t-i, --guid ID\t\t\tAnge samma ID för både UID och GID för katalogerna"
+  puts <<EOU
+USAGE:
+  #{__FILE__} DOMÄN [ARGUMENT]
+
+Lägg till en e-postdomän
+
+Exempel:
+  #{__FILE__} example.com
+
+Argument:
+  -h, --help         Visa denna information
+  -s, --simulate     Simulera allt, gör inga ändringar i filsystem eller databas
+
+  -u, --uid UID      Ange ett UID för katalogerna
+  -g, --gid GID      Ange ett GID för katalogerna
+  -i, --guid ID      Ange samma ID för både UID och GID för katalogerna
+
+Lägg till en ny e-postdomän för servern att hantera.
+UID och GID används för att ange domänkatalogernas ägare (#{DEFAULT_ID} används som standard).
+EOU
 
   # We also exit the script here..
   exit(0)

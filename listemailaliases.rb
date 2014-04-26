@@ -17,14 +17,21 @@ include ServerUtils_Lib
 
 # Method for printing the "usage information"
 def usage
-  puts "USAGE:"
-  puts "\t" + __FILE__ + " [ARGUMENT]"
-  puts "\nArgument:"
-  puts "\t-h, --help\t\t\tVisa denna information"
-  print "\n"
+  puts <<EOU
+USAGE:
+  #{__FILE__} [ARGUMENT]
 
-  puts "\t-a, --alias ALIAS\t\tLista alias vars 'alias' matchar ALIAS"
-  puts "\t-r, --reciever MOTTAGARE\tLista alias vars 'mottagare' matchar MOTTAGARE"
+Argument:
+  -h, --help                  Visa denna information
+
+  -a, --alias ALIAS           Lista alias vars 'alias' matchar ALIAS
+  -r, --reciever MOTTAGARE    Lista alias vars 'mottagare' matchar MOTTAGARE
+
+TIPS: Använd tillsammans med less om listan är för lång:
+
+ #{__FILE__}|less
+
+EOU
 
   # We also exit the script here..
   exit(0)

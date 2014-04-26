@@ -22,16 +22,23 @@ $email = ''
 
 # Method for printing the "usage information"
 def usage
-  puts "USAGE:"
-  puts "\t" + __FILE__ + " ALIAS MOTTAGARE [ARGUMENT]"
-  print "\n"
-  puts "Exempel:"
-  puts "\t" + __FILE__ + " arthur@example.com arthur.dent@example.com"
-  puts "\t" + __FILE__ + " zaphod@example.net zaphod@example.com"
-  puts "\nArgument:"
-  puts "\t-h, --help\t\t\tVisa denna information"
-  puts "\t-s, --simulate\t\t\tSimulera allt, gör inga ändringar i filsystem eller databas"
-  print "\n"
+  puts <<EOU
+USAGE:
+  #{__FILE__} ALIAS MOTTAGARE [ARGUMENT]
+
+Lägg till ett e-postalias
+
+Exempel:
+  #{__FILE__} arthur@example.com arthur.dent@example.com
+  #{__FILE__} zaphod@example.net zaphod@example.com
+
+Argument:
+  -h, --help        Visa denna information
+  -s, --simulate    Simulera allt, gör inga ändringar i filsystem eller databas
+
+Mail som skickas till ALIAS kommer att vidarebefodras till MOTTAGARE.
+Flera mottagare kan läggas till till samma alias genom att anropa skiptet flera gånger med samma alias.
+EOU
 
   # We also exit the script here..
   exit(0)

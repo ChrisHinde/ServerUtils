@@ -22,18 +22,19 @@ $delete_accounts = false
 
 # Method for printing the "usage information"
 def usage
-  puts "USAGE:"
-  puts "\t" + __FILE__ + " DOMÄN [ARGUMENT]"
-  #print "\n"
-  #puts "Exempel:"
-  #puts "\t" + __FILE__ + " arthur@example.com -n \"Arthur Dent\" -p 12qwaszx"
-  #puts "\t" + __FILE__ + " arthur@example.com -n \"Arthur Dent\" -G"
-  puts "\nArgument:"
-  puts "\t-h, --help\t\t\tVisa denna information"
-  puts "\t-s, --simulate\t\t\tSimulera allt, gör inga ändringar i filsystem eller databas"
-  #print "\n"
+  puts <<EOU
+USAGE:
+  #{__FILE__} DOMÄN [ARGUMENT]
 
-  #puts "\t-n, --name NAMN\t\t\tAnge NAMN som fullt namn för e-postkontot"
+Ta bort en domän från mailservern
+
+Argument:
+  -h, --help        Visa denna information
+  -s, --simulate    Simulera allt, gör inga ändringar i filsystem eller databas
+
+Tar bort domänen DOMÄN från mailservern.
+OBSERVERA att skriptet även har möjlighet att ta bort all tillhörande e-postkonton!
+EOU
 
   # We also exit the script here..
   exit(0)

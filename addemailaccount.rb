@@ -34,26 +34,38 @@ $ask_for_info = false
 
 # Method for printing the "usage information"
 def usage
-  puts "USAGE:"
-  puts "\t" + __FILE__ + " [E-POST] [ARGUMENT]"
-  print "\n"
-  puts "Exempel:"
-  puts "\t" + __FILE__ + " arthur@example.com -n \"Arthur Dent\" -p 12qwaszx"
-  puts "\t" + __FILE__ + " arthur@example.com -n \"Arthur Dent\" -G"
-  puts "\nArgument:"
-  puts "\t-h, --help\t\t\tVisa denna information"
-  puts "\t-s, --simulate\t\t\tSimulera allt, gör inga ändringar i filsystem eller databas"
-  print "\n"
-  
-  puts "\t-n, --name NAMN\t\t\tAnge NAMN som fullt namn för e-postkontot"
-  puts "\t-u, --uid UID\t\t\tAnge ett UID för e-postkontot"
-  puts "\t-g, --gid GID\t\t\tAnge ett GID för e-postkontot"
-  puts "\t-i, --guid ID\t\t\tAnge samma ID för både UID och GID för e-postkontot"
-  puts "\t-p, --password PASSWORD\t\tAnge PASSWORD som lösenord för e-postkontot (annars fråga)"
-  puts "\t-G, --generate\t\t\tGenerera ett lösenord för e-postkontot (annars fråga)"
-  puts "\t-r, --random\t\t\tGenerar lösenordet med enbart slumpade tecken (snabbare, annars en slumpad mening med engelska ord)"
-  puts "\t-S, --save [FIL]\t\tSparar info om användare (okrypterat lösenord etc) till FIL (eller E-POST.sec om inte angett). OBS! Använd med eftertanke!"
-  puts "\t-H, --home HOME\t\t\tAnge HOME som mapp för mailkorgen (EJ IMPLEMENTERAT ÄN!)"
+  puts <<EOU
+Användning:
+  #{__FILE__} [E-POST] [ARGUMENT]
+
+Lägg till ett nytt e-postkonto
+
+Exempel:
+  #{__FILE__} arthur@example.com -n "Arthur Dent" -p 12qwaszx
+  #{__FILE__} arthur@example.com -n "Arthur Dent" -G
+
+Argument:
+  -h, --help               Visa denna information
+  -s, --simulate           Simulera allt, gör inga ändringar i filsystem eller databas
+
+  -n, --name NAMN          Ange NAMN som fullt namn för e-postkontot
+  -u, --uid UID            Ange ett UID för e-postkontot
+  -g, --gid GID            Ange ett GID för e-postkontot
+  -i, --guid ID            Ange samma ID för både UID och GID för e-postkontot
+  -p, --password PASSWORD  Ange PASSWORD som lösenord för e-postkontot (annars fråga)
+  -G, --generate           Generera ett lösenord för e-postkontot (annars fråga)
+  -r, --random             Generar lösenordet med enbart slumpade tecken (snabbare, annars en slumpad mening med engelska ord)
+  -S, --save [FIL]         Sparar info om användare (okrypterat lösenord etc) till FIL (eller E-POST.sec om inte angett). OBS! Använd med eftertanke!
+  -H, --home HOME          Ange HOME som mapp för mailkorgen (EJ IMPLEMENTERAT ÄN!)
+
+Om skriptet anropas utan en e-postadress så kommer det att köras i "Interaktivt läge", dvs skriptet kommer att fråga efter information.
+Dock måste UID/GID anges med ett argument till skriptet om man vill ange annat än standard.
+
+Det finns två metoder att generera ett lösenord:
+  1. Generera ett "vanligt" slumpad lösenord med 16 tecken (Ex: nXUglO1p01jCDJux).
+      Används med -Gr som argument eller genom att ange 'r' i interaktivt läge
+  2. Generera ett lösenord bestående av fyra engelska ord (Ex: form and yes idea)
+EOU
 
   # We also exit the script here..
   exit(0)
