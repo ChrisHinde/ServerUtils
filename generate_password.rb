@@ -1,67 +1,81 @@
 #!/usr/bin/env ruby
+# encoding: utf-8
 
 # Script for generating a secure and user friendly password (part of ServerUtils [su])
 
-# Code from http://ruby.elevatedintel.com/blog/generating-secure-passwords-with-ruby-atmospheric-noise-and-comics/  
-# Modified to allow n number of words etc
-#   by Christopher Hindefjord - chris@hindefjord.se - http://chris@hindefjord.se - 2014
+# Code originally based on http://ruby.elevatedintel.com/blog/generating-secure-passwords-with-ruby-atmospheric-noise-and-comics/  
+#   Modified by Christopher Hindefjord - chris@hindefjord.se - http://chris@hindefjord.se - 2014
 # Licensed under the MIT License (see LICENSE file)
 
  
 require 'net/http'
-require 'nokogiri'
-require 'rss'
+require 'optparse'
 require 'open-uri'
+require_relative 'su_lib.rb'
+
+include ServerUtils_Lib
  
 wordlist = Array.new
-number_of_words = 4
+$number_of_words = 4
+$lang = 'se'
 
-if ARGV.length >= 1
-  number_of_words = ARGV[0].to_i
+
+# Method for printing the "usage information"
+def usage
+  puts <<EOU
+Användning:
+  #{__FILE__} [LÄNGD] [ARGUMENT]
+
+Generera lösenord
+
+Exempel:
+  #{__FILE__} 5
+  #{__FILE__} 7 -l se
+
+Argument:
+  -h, --help               Visa denna information
+
+  -l, --lang LANG          Använd språket LANG för lösenordet (en = Engelska, se = Svenska)
+
+  LÄNGD                    Antal ord i lösenorder
+
+Genererar ett lösenord bestående av LÄNGD antal slumpade ord (Standardlängden är 4 ord).
+Kan generera lösenord på både svenska och engelska.
+
+Ett antal slumpade ord hämtas först från en extern ordlista, av dem slumpas sedan LÄNGD antal ord för att bilda lösenordet.
+
+OBS! Mellanslagen är en del av lösenordet!
+EOU
+
+  # We also exit the script here..
+  exit(0)
 end
 
-## We try to avoid this method!
-##  1. It adds to the overhead
-##  2. It produced single words like "HomeUSPoliticsWorldBusinessTechHealthScienceEntertainmentNewsfeedLivingOpinionSportsMagazine" 
-#google_news_query = 'http://news.google.com/news/feeds?q=bible&output=rss'
-#google_news_result_url = ''
- 
-#open(google_news_query) do |rss|
-#  feed = RSS::Parser.parse(rss)
-#  item = feed.items[rand(0..6)]
-#    google_news_result_url = item.link
-#end
+# Validate and parse the flags
+OptionParser.new do |o|
+  o.on('-l LANG',     '--lang LANG')        { |l| $lang = l }
+  o.on('-h',          '--help')             { usage }
+  o.parse!
+end
 
-r = rand(15)
-num = r > 10 ? r.to_s : '0' + r.to_s
-url = 'http://www.manythings.org/vocabulary/lists/l/words.php?f=noll' + num
+if ARGV.length >= 1
+  $number_of_words = ARGV[0].to_i
+end
 
-doc = Nokogiri::HTML(open(url))
- 
-all_words = ""
-doc.traverse{ |node|
-  if node.text? and not node.text =~/^\s*$/
-    # Avoid URLs
-    unless node.text.start_with?('www') 
-      all_words << node.text.strip + " "
-    end
-  end
-}
+url = 'http://hus42.se/word_rack/' + $lang + "/" + ($number_of_words * 5).to_s
 
-wordlist = all_words.split("\s")
-wordlist.each { |word| word.gsub! /\W/, ""; word.strip! }
-wordlist.reject!(&:empty?)
+all_words = open(url).read
 
-random_output = ""
-random_data = open("http://www.random.org/integers/?num=#{number_of_words}&min=0&max=#{wordlist.length}&col=1&base=10&format=plain&rnd=new") { |data|
-  generated_number = data.read
-  random_output << generated_number.strip
-}
-random_numbers = random_output.split(/\s/).map(&:to_i)
+wordlist = all_words.split("\n")
+
+random_numbers = []
+for i in 1..$number_of_words
+  random_numbers.push rand(wordlist.length)
+end
 
 password = ''
-for i in 0..(number_of_words-1)
-  password << wordlist[random_numbers[i]] + ' '
+for i in 0..($number_of_words-1)
+  password << wordlist[random_numbers[i]] << ' '
 end
 
 puts password
